@@ -2,18 +2,18 @@ const timeLeftDisplay = document.querySelector('#time-left');
 const resultDisplay = document.querySelector('#result');
 const startPauseBtn = document.querySelector('#start-pause-button');
 const squares = document.querySelectorAll('.grid div');
-let currentIndex = 76 //тва е стартинг блока
-const width = 9 //tolkova sme go hardcode-nali
+let currentIndex = 76
+const width = 9
 const logsLeft = document.querySelectorAll('.log-left');
-const logsRight=document.querySelectorAll('.log-right');
-const carsLeft=document.querySelectorAll('.car-left');
-const carsRight=document.querySelectorAll('.car-right');
+const logsRight = document.querySelectorAll('.log-right');
+const carsLeft = document.querySelectorAll('.car-left');
+const carsRight = document.querySelectorAll('.car-right');
 let timerId
-let currentTime=20
+let currentTime = 20
 let outcomeTimerId
 
 function moveFrog(e) {
-    squares[currentIndex].classList.remove('frog') //махаме я откъдето е била и слагаме на ново място
+    squares[currentIndex].classList.remove('frog')
     switch (e.key) {
         case 'ArrowLeft':
             if (currentIndex % width !== 0) currentIndex -= 1;
@@ -35,14 +35,14 @@ function moveFrog(e) {
 
 function autoMoveElements() {
     currentTime--;
-    timeLeftDisplay.textContent=currentTime
+    timeLeftDisplay.textContent = currentTime
     logsLeft.forEach(logLeft => moveLogLeft(logLeft));
-    logsRight.forEach(logRight=>moveLogRight(logRight));
-    carsLeft.forEach(carLeft=>moveCarLeft(carLeft));
-    carsRight.forEach(carRight=>moveCarRight(carRight));  
+    logsRight.forEach(logRight => moveLogRight(logRight));
+    carsLeft.forEach(carLeft => moveCarLeft(carLeft));
+    carsRight.forEach(carRight => moveCarRight(carRight));
 }
 
-function checkOutcomes(){
+function checkOutcomes() {
     win()
     lose()
 }
@@ -53,7 +53,7 @@ function moveLogLeft(logLeft) {
         case logLeft.classList.contains('l1'):
             logLeft.classList.remove('l1');
             logLeft.classList.add('l5');
-           break;
+            break;
 
         case logLeft.classList.contains('l2'):
             logLeft.classList.remove('l2');
@@ -69,7 +69,7 @@ function moveLogLeft(logLeft) {
             logLeft.classList.remove('l4');
             logLeft.classList.add('l3');
             break;
- 
+
         case logLeft.classList.contains('l5'):
             logLeft.classList.remove('l5');
             logLeft.classList.add('l4');
@@ -82,7 +82,7 @@ function moveLogRight(logRight) {
         case logRight.classList.contains('l1'):
             logRight.classList.remove('l1');
             logRight.classList.add('l2');
-           break;
+            break;
 
         case logRight.classList.contains('l2'):
             logRight.classList.remove('l2');
@@ -98,7 +98,7 @@ function moveLogRight(logRight) {
             logRight.classList.remove('l4');
             logRight.classList.add('l5');
             break;
- 
+
         case logRight.classList.contains('l5'):
             logRight.classList.remove('l5');
             logRight.classList.add('l1');
@@ -111,7 +111,7 @@ function moveCarLeft(carLeft) {
         case carLeft.classList.contains('c1'):
             carLeft.classList.remove('c1');
             carLeft.classList.add('c2');
-           break;
+            break;
 
         case carLeft.classList.contains('c2'):
             carLeft.classList.remove('c2');
@@ -130,7 +130,7 @@ function moveCarRight(carRight) {
         case carRight.classList.contains('c1'):
             carRight.classList.remove('c1');
             carRight.classList.add('c3');
-           break;
+            break;
 
         case carRight.classList.contains('c2'):
             carRight.classList.remove('c2');
@@ -146,40 +146,40 @@ function moveCarRight(carRight) {
 
 
 
-function lose(){
-    if(squares[currentIndex].classList.contains('c1') ||
-    squares[currentIndex].classList.contains('l4') ||
-    squares[currentIndex].classList.contains('l5')||
-    currentTime<=0
+function lose() {
+    if (squares[currentIndex].classList.contains('c1') ||
+        squares[currentIndex].classList.contains('l4') ||
+        squares[currentIndex].classList.contains('l5') ||
+        currentTime <= 0
     ) {
-        resultDisplay.textContent='You lose!';
+        resultDisplay.textContent = 'You lose!';
         clearInterval(timerId);
         clearInterval(outcomeTimerId);
         squares[currentIndex].classList.remove('frog');
-        document.removeEventListener('keyup',moveFrog)
+        document.removeEventListener('keyup', moveFrog)
     }
 }
 
 
 
-function win(){
-    if(squares[currentIndex].classList.contains('ending-block')){
-        resultDisplay.textContent='You win!';
+function win() {
+    if (squares[currentIndex].classList.contains('ending-block')) {
+        resultDisplay.textContent = 'You win!';
         clearInterval(timerId);
-        document.removeEventListener('keyup',moveFrog);
+        document.removeEventListener('keyup', moveFrog);
     }
 }
 
-startPauseBtn.addEventListener('click',()=>{
-    if(timerId){
-        clearInterval(timerId); //ako e pause
-        clearInterval( outcomeTimerId);
-        outcomeTimerId=null;
-        timerId=null;
+startPauseBtn.addEventListener('click', () => {
+    if (timerId) {
+        clearInterval(timerId);
+        clearInterval(outcomeTimerId);
+        outcomeTimerId = null;
+        timerId = null;
         document.removeEventListener('keyup', moveFrog);
-}else{
-       timerId=setInterval(autoMoveElements, 1000); //ako e start
-        outcomeTimerId=setInterval(checkOutcomes,50)
+    } else {
+        timerId = setInterval(autoMoveElements, 1000);
+        outcomeTimerId = setInterval(checkOutcomes, 50)
         document.addEventListener('keyup', moveFrog)
     }
 })

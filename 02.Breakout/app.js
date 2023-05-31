@@ -9,16 +9,17 @@ const ballDiameter = 20;
 let timerId
 let xDirection = -2;
 let yDirection = 2;
-let score=0;
+let score = 0;
 
-const userStart = [230, 10]; //почва винаги от тук но се мени местим го
+const userStart = [230, 10];
 let currentPosition = userStart;
 
 const ballStart = [270, 35];
 let ballCurrentPosition = ballStart;
+
 //create block
 class Block {
-    constructor(xAxis, yAxis) { //намираме къде са всчики точки и добавяме пикселите за да не се презастъпят квадратчетата
+    constructor(xAxis, yAxis) {
         this.bottomLeft = [xAxis, yAxis];
         this.bottomRight = [xAxis + blockWidth, yAxis];
         this.topLeft = [xAxis, yAxis + blockHeight];
@@ -54,8 +55,8 @@ function addBlocks() {
     for (let i = 0; i < blocks.length; i++) {
         const block = document.createElement('div');
         block.classList.add('block');
-        block.style.left = blocks[i].bottomLeft[0] + 'px' //[0]=xAxis
-        block.style.bottom = blocks[i].bottomLeft[1] + 'px' //px за да хване в css като команда
+        block.style.left = blocks[i].bottomLeft[0] + 'px'
+        block.style.bottom = blocks[i].bottomLeft[1] + 'px'
         grid.appendChild(block);
     }
 }
@@ -65,13 +66,13 @@ addBlocks()
 //add user
 const user = document.createElement('div');
 user.classList.add('user');
-user.style.left = currentPosition[0] + 'px' //[0]=xAxis
+user.style.left = currentPosition[0] + 'px'
 user.style.bottom = currentPosition[1] + 'px'
 grid.appendChild(user);
 
 //draw the user (function to avoid repetition)
 function drawUser() {
-    user.style.left = currentPosition[0] + 'px' //[0]=xAxis
+    user.style.left = currentPosition[0] + 'px'
     user.style.bottom = currentPosition[1] + 'px'
 }
 
@@ -87,16 +88,16 @@ function drawBall() {
 function moveUser(e) {
     switch (e.key) {
         case 'ArrowLeft':
-            if (currentPosition[0] > 0) { //за да не излиза извън екрана 
+            if (currentPosition[0] > 0) {
                 currentPosition[0] -= 10;
-                drawUser() //за да избегнем повторение викаме функцията коят задава нови координати
+                drawUser()
             }
             break;
 
         case 'ArrowRight':
-            if (currentPosition[0] < boardWidth - blockWidth) { //за да не излиза извън екрана 
+            if (currentPosition[0] < boardWidth - blockWidth) {
                 currentPosition[0] += 10;
-                drawUser() //за да избегнем повторение викаме функцията коят задава нови координати
+                drawUser()
             }
             break;
     }
@@ -107,8 +108,6 @@ document.addEventListener('keydown', moveUser)
 //add ball
 const ball = document.createElement('div');
 ball.classList.add('ball');
-//ball.style.left=ballCurrentPosition[0]+'px';
-//ball.style.bottom=ballCurrentPosition[1]+'px';
 drawBall()
 grid.appendChild(ball);
 
@@ -127,21 +126,21 @@ function checkForCollisions() {
     //check for block collisions
     for (let i = 0; i < blocks.length; i++) {
         if ((ballCurrentPosition[0] > blocks[i].bottomLeft[0] && ballCurrentPosition[0] < blocks[i].bottomRight[0]) &&
-         ((ballCurrentPosition[1] + ballDiameter) > blocks[i].bottomLeft[1] && ballCurrentPosition[1] < blocks[i].topLeft[1])) { 
-            //ако всичко това е вярно значи сме ударили блокче следим x/y axis дали е по малко и влиза в неговия дименшън
+            ((ballCurrentPosition[1] + ballDiameter) > blocks[i].bottomLeft[1] && ballCurrentPosition[1] < blocks[i].topLeft[1])) {
+
 
             const allBlocks = Array.from(document.querySelectorAll('.block'));
             allBlocks[i].classList.remove('block');
             blocks.splice(i, 1);
             changeDirection();
             score++;
-            scoreDisplay.innerHTML=score;
+            scoreDisplay.innerHTML = score;
 
             //check for win
-            if(blocks.length===0){
-                scoreDisplay.innerHTML='YOU WIN!';
-               clearInterval(timerId);
-               document.removeEventListener('keydown',moveUser);
+            if (blocks.length === 0) {
+                scoreDisplay.innerHTML = 'YOU WIN!';
+                clearInterval(timerId);
+                document.removeEventListener('keydown', moveUser);
             }
         }
     }
@@ -149,15 +148,14 @@ function checkForCollisions() {
     //check for wall collisions
     if (ballCurrentPosition[0] >= (boardWidth - ballDiameter) ||
         ballCurrentPosition[1] >= (boardHeight - ballDiameter) ||
-        ballCurrentPosition[0] <= 0) 
-        {
+        ballCurrentPosition[0] <= 0) {
         changeDirection()
     }
 
     //check for user collisions
-    if((ballCurrentPosition[0]>currentPosition[0]&& ballCurrentPosition[0]<currentPosition[0]+blockWidth)&&
-       (ballCurrentPosition[1]>currentPosition[1]&&ballCurrentPosition[1]<currentPosition[1]+blockHeight)
-    ){
+    if ((ballCurrentPosition[0] > currentPosition[0] && ballCurrentPosition[0] < currentPosition[0] + blockWidth) &&
+        (ballCurrentPosition[1] > currentPosition[1] && ballCurrentPosition[1] < currentPosition[1] + blockHeight)
+    ) {
         changeDirection()
     }
     //check for game over

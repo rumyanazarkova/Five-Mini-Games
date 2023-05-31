@@ -22,14 +22,14 @@ function buildDeck() {
 
     for (let i = 0; i < types.length; i++) {
         for (let j = 0; j < values.length; j++) {
-            deck.push(values[j] + '-' + types[i]); //A-C,K-C,5-S,5-H ..
+            deck.push(values[j] + '-' + types[i]); 
         }
     }
 }
 
 function shuffleDeck() {
     for (let i = 0; i < deck.length; i++) {
-        let j = Math.floor(Math.random() * deck.length) //(0-1)*52
+        let j = Math.floor(Math.random() * deck.length) 
         let temp = deck[i];
         deck[i] = deck[j];
         deck[j] = temp;
@@ -38,7 +38,7 @@ function shuffleDeck() {
 }
 
 function startGame() {
-    hidden = deck.pop(); //махаме картата от арея
+    hidden = deck.pop();
     dealerSum += getValue(hidden);
     dealerAceCount += checkAce(hidden);
 
@@ -116,14 +116,14 @@ function getValue(card) {
     let data = card.split('-')
     let value = data[0]
 
-    if (isNaN(value)) {  //A J K Q
+    if (isNaN(value)) {  
         if (value == 'A') {
             return 11;
         }
         return 10;
     }
 
-    return parseInt(value) //2,3,4,etc.
+    return parseInt(value) 
 
 }
 
